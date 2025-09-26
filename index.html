@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Woloo After School Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+  </head>
+  <body>
+    <div id="app" class="container py-4">
+      <header class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0"><i class="fa-solid fa-school me-2"></i>Woloo After School Hub</h1>
+        <div class="d-flex gap-2">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa fa-search"></i></span>
+            <input v-model="searchQuery" @input="onSearchInput" type="text" class="form-control" placeholder="Search lessons..." />
+          </div>
+          <button class="btn btn-primary" :disabled="cartCount===0" @click="toggleCart">
+            <i class="fa fa-shopping-cart me-1"></i>
+            Cart ({{ cartCount }})
+          </button>
+        </div>
+      </header>
+
+      <section v-if="!showCart">
+        <div class="d-flex flex-wrap align-items-end gap-2 mb-3">
+          <div>
+            <label class="form-label mb-0 small">Sort by</label>
+            <select v-model="sortKey" class="form-select">
+              <option value="subject">Subject</option>
+              <option value="location">Location</option>
+              <option value="price">Price</option>
+              <option value="spaces">Spaces</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label mb-0 small">Order</label>
+            <select v-model="sortDir" class="form-select">
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-4" v-for="lesson in sortedLessons" :key="lesson._id">
+            <div class="card h-100">
+              <img :src="lesson.image || 'https://picsum.photos/seed/woloo-'+lesson.subject+'/600/300'" class="card-img-top" alt="lesson image" />
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><i class="fa-solid fa-book-open me-2"></i>{{ lesson.subject }}</h5>
+                <p class="card-text mb-1"><i class="fa-solid fa-location-dot me-2 text-muted"></i>{{ lesson.location }}</p>
+                <p class="card-text mb-1"><i class="fa-solid fa-tag me-2 text-muted"></i>${{ lesson.price }}</p>
+                <p class="card-text"><i class="fa-solid fa-user-group me-2 text-muted"></i>Spaces: {{ lesson.spaces }}</p>
+                <div class="mt-auto">
+                  <button class="btn btn-success w-100" :disabled="lesson.spaces===0" @click="addToCart(lesson)">
+                    <i class="fa-solid fa-cart-plus me-2"></i>
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section v-else>
+        <h2 class="h5">Shopping Cart</h2>
+        <div v-if="cart.length===0" class="alert alert-info">Your cart is empty.</div>
+        <ul class="list-group mb-3" v-else>
+          <li class="list-group-item d-flex justify-content-between align-items-center" v-for="item in cart" :key="item._id">
+            <div>
+              <div class="fw-semibold">{{ item.subject }}</div>
+              <small class="text-muted">{{ item.location }} • ${{ item.price }}</small>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-secondary">x{{ item.quantity }}</span>
+              <button class="btn btn-outline-danger btn-sm" @click="removeFromCart(item)"><i class="fa fa-trash"></i></button>
+            </div>
+          </li>
+        </ul>
+
+        <form class="card p-3" @submit.prevent="submitOrder">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Name</label>
+              <input v-model="checkout.name" type="text" class="form-control" placeholder="Letters only" />
+              <div class="form-text text-danger" v-if="!validName && checkout.name">Name must be letters only.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input v-model="checkout.phone" type="text" class="form-control" placeholder="Numbers only" />
+              <div class="form-text text-danger" v-if="!validPhone && checkout.phone">Phone must be numbers only.</div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="fw-bold">Total: ${{ cartTotal }}</div>
+            <button class="btn btn-primary" type="submit" :disabled="!canCheckout">Checkout</button>
+          </div>
+          <div v-if="orderMessage" class="alert alert-success mt-3">{{ orderMessage }}</div>
+        </form>
+      </section>
+
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script type="module" src="./js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>
+
+
