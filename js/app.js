@@ -52,12 +52,44 @@ const app = Vue.createApp({
 		},
 		canCheckout() {
 			return this.cart.length > 0 && this.validName && this.validPhone;
+		},
+		getLessonImage() {
+			return (lesson) => {
+				if (lesson.image) return lesson.image;
+				const imageMap = {
+					'Math': './images/maths.webp',
+					'Science': './images/Science.jpeg',
+					'English': './images/English.jpeg',
+					'Coding': './images/Coding.webp',
+					'Art': './images/Art.webp',
+					'Music': './images/Music.jpg',
+					'Drama': './images/Drama.jpeg',
+					'Robotics': './images/Robotics.jpg',
+					'French': './images/French.jpeg'
+				};
+				return imageMap[lesson.subject] || `https://picsum.photos/seed/woloo-${lesson.subject}/600/300`;
+			};
 		}
 	},
 	mounted() {
 		this.fetchLessons();
 	},
 	methods: {
+		getLessonImage(lesson) {
+			if (lesson.image) return lesson.image;
+			const imageMap = {
+				'Math': './images/maths.webp',
+				'Science': './images/Science.jpeg',
+				'English': './images/English.jpeg',
+				'Coding': './images/Coding.webp',
+				'Art': './images/Art.webp',
+				'Music': './images/Music.jpg',
+				'Drama': './images/Drama.jpeg',
+				'Robotics': './images/Robotics.jpg',
+				'French': './images/French.jpeg'
+			};
+			return imageMap[lesson.subject] || `https://picsum.photos/seed/woloo-${lesson.subject}/600/300`;
+		},
 		async fetchLessons() {
 			const res = await fetch(`${API_BASE}/lessons`);
 			this.lessons = await res.json();
@@ -108,15 +140,26 @@ const app = Vue.createApp({
 				body: JSON.stringify(order)
 			});
 			if (res.ok) {
-				// Update spaces via PUT for each ordered lesson
+				// Update spaces via PUT for each ordered lesson, retry if id stale
 				for (const item of order.items) {
-					const lesson = this.lessons.find(l => l._id === item.lessonId);
+					let lesson = this.lessons.find(l => l._id === item.lessonId);
 					if (!lesson) continue;
-					await fetch(`${API_BASE}/lessons/${lesson._id}`, {
-						method: 'PUT',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({ spaces: lesson.spaces })
-					});
+					const doPut = async (idToUse, spacesVal) => {
+						return fetch(`${API_BASE}/lessons/${idToUse}`, {
+							method: 'PUT',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ spaces: spacesVal })
+						});
+					};
+					let putRes = await doPut(lesson._id, lesson.spaces);
+					if (putRes.status === 404) {
+						// refetch lessons and try to find by (subject, location, price)
+						const fresh = await fetch(`${API_BASE}/lessons`).then(r => r.json());
+						const match = fresh.find(l => l.subject === lesson.subject && l.location === lesson.location && l.price === lesson.price);
+						if (match) {
+							await doPut(match._id, lesson.spaces);
+						}
+					}
 				}
 				this.orderMessage = 'Order submitted!';
 				this.cart = [];

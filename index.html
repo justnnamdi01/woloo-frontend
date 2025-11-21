@@ -47,7 +47,7 @@
         <div class="row g-3">
           <div class="col-md-6 col-lg-4" v-for="lesson in sortedLessons" :key="lesson._id">
             <div class="card h-100">
-              <img :src="lesson.image || 'https://picsum.photos/seed/woloo-'+lesson.subject+'/600/300'" class="card-img-top" alt="lesson image" />
+              <img :src="getLessonImage(lesson)" class="card-img-top" alt="lesson image" />
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title"><i class="fa-solid fa-book-open me-2"></i>{{ lesson.subject }}</h5>
                 <p class="card-text mb-1"><i class="fa-solid fa-location-dot me-2 text-muted"></i>{{ lesson.location }}</p>
