@@ -1,4 +1,4 @@
-const API_BASE = localStorage.getItem('API_BASE') || 'http://localhost:3000';
+const API_BASE = localStorage.getItem('API_BASE') || 'https://woloo-backend.onrender.com';
 
 const app = Vue.createApp({
 	data() {
