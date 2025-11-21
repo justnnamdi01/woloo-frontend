@@ -1,0 +1,175 @@
+Overall Requirements and Instructions
+• You can use an external CSS library such as Bootstrap. Make sure the library
+file or online link is included in the submission.
+A submission could receive zero marks if it fails any of the
+following requirements:
+• [Front-End]
+o the App must be implemented by using Vue.js framework. Other
+frameworks or related technologies (e.g., React, AngularJS, Svelte,
+Apache, XAMPP) are NOT allowed.
+o Any JavaScript library is NOT allowed if it duplicates or replaces features
+provided by Vue.js framework. Check with the tutor if not sure.
+• [Back-End and Connection details for the Front-End]
+o the Back-End server must use “Node.js”; others such as Apache or
+Xampp are not allowed.
+o in relation to hosting the Back-End server, it is not allowed to use AWS
+S3, nor AWS EC2, nor other cloud-based hosting solutions (e.g.,
+Heroku). The only allowed ones are AWS or render.com, with the
+technologies covered in the related Lecture.
+o the REST API must be developed with “Express.js”.
+o the Front-End data access must be achieved with “promise” using “fetch”
+function; “XMLHttpRequest” or library such as axios:js are not allowed.
+o the data must be stored in “MongoDB Atlas” and retrieved via your
+Express.js App; local MongoDB or any other databases are not allowed.
+Full Stack Development 2024-25 CST3144
+15
+o connection to MongoDB (in your Express.js App) must use the native
+Node.js driver only; libraries like Mongoose are not allowed.
+Marking criteria
+• General Requirements (20%):
+A. [GitHub Repositories] the code of the Vue.js App must be hosted in a
+GitHub repository, with at least 10 commits, and the code of the
+Express.js App must be hosted in another GitHub repository, with at
+least 10 commits (6% if 2 separated repositories are used, 3% if only 1
+repository is used).
+B. [GitHub Pages] the Vue.js App must be hosted and demonstrated on/via
+GitHub Pages and connected (via Fetch) to your AWS (or render.com)
+Express.js App (7% if requirement is fully covered, 3% if app is running
+locally).
+C. [AWS (or render.com)] the Node/Express server must be hosted on
+Amazon AWS ( https://aws.amazon.com/ ) or on Render
+( https://render.com ) (7% if requirement is fully covered, 3% if the server
+is run locally, 0% if the server is hosted in another cloud-based solution).
+• [Front-End] “Display List of Lessons” functionality (7%):
+A. there should be at least 10 lessons, and each lesson should have 5
+spaces (or availability) (1%).
+B. each lesson should have at least (5%): Subject (1%), Location (1%),
+Price (1%), Spaces (or availability: this indicates how many spaces are
+left) (1%), a Font Awesome icon (or an Image) (1%).
+C. v-for must be used for the display of the lesson list (1%).
+• [Front-End] Sort functionality (10%):
+Full Stack Development 2024-25 CST3144
+17
+A. the user can choose to sort the lessons by one of the following attributes
+(8%): subject (2%), location (2%), price (2%), or spaces (i.e. availability)
+(2%).
+B. there must be an option to sort in ascending or descending order (order
+dependent on the sorting attribute selected), which should work for each
+of the attributes (2%).
+• [Front-End] “Add to Cart” functionality (5%):
+A. each lesson must have an “Add to Cart” button (1%).
+B. the button is always visible, and only enabled when space is larger than
+0 (1%).
+C. clicking the button once (related interactions implemented by using v-on)
+will add one space to the shopping cart, reducing the remaining space
+by one (2%).
+D. once there is no more space, i.e. space = 0, the “Add to cart” button
+should be disabled but still visible, i.e. clicking it will not further reduce
+“space” nor add lessons to the cart (1%).
+• [Front-End] “Shopping Cart” functionality (5%):
+A. the shopping cart button should only be enabled after at least one lesson
+is added to cart (1%).
+B. clicking the shopping cart button should show the cart page, and clicking
+the button again goes back to the lesson page (1%).
+C. the shopping cart, in the cart page, should show all the lessons added
+(1%).
+D. in the shopping cart page, the user should be able to remove lessons
+from the shopping cart; the removed lesson is added back to the lesson
+list (in the lesson page) (2%).
+• [Front-End] Checkout functionality (6%):
+A. the checkout is part of the shopping cart page (not part of the lessons
+page) (1%).
+B. the “checkout” button is always visible and only enabled (clickable) after
+valid “Name” and “Phone” are provided (2%).
+C. the “Name” must be letters only and the “Phone” must be numbers only;
+the check must be done using JavaScript (suggestion: regular
+expressions) (2%).
+D. clicking the “checkout” button should display a message confirming the
+order has been submitted (1%).
+• [Front-End (and Back-End)] Search Functionality (10%):
+• [Intro] This is the challenge component of this coursework, and it is not
+expected that everyone can complete it. The solution is not fully covered in
+the lecture or lab, so you need to research it.
+Full Stack Development 2024-25 CST3144
+18
+• [Feature Description] The goal is to add a full-text search feature,
+• The user can search for a lesson without specifying which attribute to search
+on.
+• For example, searching for “a” should return all the lessons with “a” in its
+“title” or “location” or “price” or “availability”.
+• Solutions provided are marked as follows.
+[Base Marks (provided depending on which following approach is chosen)]
+A. [Approach 1] (2%) “Implemented only in the Front-End”, you can implement
+this feature using Vue.js and/or an existing JavaScript library (could not be
+a Vue.js library).
+OR
+• [Approach 2] (7%) “Implemented functionally in the Back-End and
+graphically in the Front-End”, the difference with “Approach 1” above is that
+in this case the search needs to be performed in the Back-End (Express +
+MongoDB), not directly and exclusively in the Front-End, but the Front-End
+will receive (e.g., via REST API) results from the Back-End and manage the
+graphical aspects for showing the search results. You cannot use any
+existing library to implement this functionality. Otherwise, you will not
+receive any mark for this part. The points for this approach are divided as
+follows.
+a. “Fetch and Visual Aspects” (3%), in the front end, a “fetch”
+request should be created to send the search information
+to the Back-End, and related filtered results obtained
+should be shown in the Front-End.
+b. “Express API” (4%), an Express.js route should be created
+to handle the search request, and to return the search
+results from the MongoDB. The student should implement
+this as a GET route (“/search”), and should be able to test
+it also without using the Front-End.
+[Further Mark]
+B. “search as you type” (3%), there is also this mark if the search supports
+“search as you type”, i.e. the search starts when the user types the first letter
+(displaying all the lessons containing that letter), and the result list is
+dynamically filtered as more search letters are entered (similar to Google
+Search).
+• [Back-End] MongoDB should have (8%):
+A. a collection for lesson information (minimal fields: topic, price, location,
+and space) (4%).
+B. a collection for order information (minimal fields: name,
+phone number, lesson IDs, and number of space) (4%). Suggestion: the
+element lessonIDs can contain 1 or more lesson IDs, depending on how
+many different kinds of lessons you have in your order. Other solutions
+could be accepted: in fact, how you design this is not the primary aspect
+Full Stack Development 2024-25 CST3144
+19
+of this module, therefore it is up to you to find a reasonable solution that
+works satisfactorily.
+• [Back-End] Middleware Functions implemented in the Express.js Server
+should include (8%):
+A. a “logger” middleware that outputs all requests to the server console; the
+student needs to be able to inspect and explain the log (4%).
+B. a static file middleware that returns lesson images, or an error message
+if the image file does not exist; the student needs to be able to test and
+demonstrate these aspects (4%).
+• [Back-End] REST API implemented in the Express.js Server should
+include and be tested as indicated in the following (the student must be
+able to test all the routes properly and explain them) (12%):
+A. one GET route /lessons, which returns all the lessons as a Json,
+demonstrated with a Postman request prepared in advance (3%).
+Example:
+[
+{‘ topic’: ‘math’, ‘location’: ‘Hendon’, ‘price’: 100, ‘space’: 5},
+{‘ topic’: ‘math’, ‘location’: ‘Colindale’, ‘price’: 80, ‘space’: 2},
+{‘ topic’: ‘math’, ‘location’: ‘Brent Cross’, ‘price’: 90, ‘space’: 6},
+{‘ topic’: ‘math’, ‘location’: ‘Golders Green’, ‘price’: 95, ‘space’: 7},
+]
+B. one POST route, which saves a new order to the “order” collection,
+demonstrated with a Postman request prepared in advance (4%).
+C. one PUT route, which can update any attribute in a lesson of the “lesson”
+collection (suggestion/requirement: this will be used, after an order is
+submitted, for updating the available spaces: updating to any number
+the available spaces, and not just increasing or decreasing),
+demonstrated with a Postman request prepared in advance (5% if the
+requirement is fully covered, 2% if the solution is just increase or
+decrease).
+• [Front-End] Fetch Functions implemented in the Front-End should
+include (9%):
+A. one fetch that retrieves all the lessons with GET (3%).
+B. one fetch that saves a new order with POST after it is submitted (3%).
+C. one fetch that updates the available lesson space with PUT after an
+order is submitted (3%).
