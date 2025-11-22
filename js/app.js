@@ -1,6 +1,15 @@
 const API_BASE = localStorage.getItem('API_BASE') || 'https://woloo-backend.onrender.com';
 
-const app = Vue.createApp({
+function debounce(fn, wait) {
+	let timeoutId = null;
+	return function(...args) {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => fn.apply(this, args), wait);
+	};
+}
+
+new Vue({
+	el: '#app',
 	data() {
 		return {
 			lessons: [],
@@ -52,23 +61,6 @@ const app = Vue.createApp({
 		},
 		canCheckout() {
 			return this.cart.length > 0 && this.validName && this.validPhone;
-		},
-		getLessonImage() {
-			return (lesson) => {
-				if (lesson.image) return lesson.image;
-				const imageMap = {
-					'Math': './images/maths.webp',
-					'Science': './images/Science.jpeg',
-					'English': './images/English.jpeg',
-					'Coding': './images/Coding.webp',
-					'Art': './images/Art.webp',
-					'Music': './images/Music.jpg',
-					'Drama': './images/Drama.jpeg',
-					'Robotics': './images/Robotics.jpg',
-					'French': './images/French.jpeg'
-				};
-				return imageMap[lesson.subject] || `https://picsum.photos/seed/woloo-${lesson.subject}/600/300`;
-			};
 		}
 	},
 	mounted() {
@@ -170,15 +162,5 @@ const app = Vue.createApp({
 		}
 	}
 });
-
-function debounce(fn, wait) {
-	let timeoutId = null;
-	return function(...args) {
-		clearTimeout(timeoutId);
-		timeoutId = setTimeout(() => fn.apply(this, args), wait);
-	};
-}
-
-app.mount('#app');
 
 
